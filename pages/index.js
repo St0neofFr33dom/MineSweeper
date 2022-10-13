@@ -1,41 +1,59 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { useState } from 'react'
-import Board
- from '../components/Board'
+import { useState, useReducer } from 'react'
+import Board from '../components/Board'
+
+
+
 export default function Home() {
 
+  function reducer(state,action){
+    switch(action.type){
+      case 'changeNumber':
+        return {...state, [action.field]:action.value}
+      case 'newGame':
+        let minePositions = [];
+        let gridSize = state.width*state.height
+        while (minePositions.length < state.mines){
+          let position = Math.floor((Math.random()*gridSize))
+          if(!minePositions.includes(position)){
+            minePositions.push(position)
+          }  
+        }
+        let gameGrid = [];
+        for (let i = 0; i < state.height; i++){
+          let row = [];
+          for (let j = 0; j < state.width; j++){
+            row.push(false)
+          }
+          gameGrid.push(row)
+        }
+        for (let i = 0; i < minePositions.length; i++){
+          let position = minePositions[i]
+          let rowPosition = Math.floor((position) / state.width);
+          let columnPosition = position % state.width;
+          gameGrid[rowPosition][columnPosition] = true
+        }
+        return {...state, gameGrid:gameGrid}
+      default:
+        return state
+    }
+  }
 
-  const [gameGrid,setGameGrid] = useState([[true,false,false],[false,true,false],[false,false,false]])
-  const [gridWidth,setGridWidth] = useState(5)
-  const [gridHeight,setGridHeight] = useState(4)
-  const [numberOfMines,setNumberOfMines] = useState(2)
+  // const [gameGrid,setGameGrid] = useState([[true,false,false],[false,true,false],[false,false,false]])
+  // const [gridWidth,setGridWidth] = useState(5)
+  // const [gridHeight,setGridHeight] = useState(4)
+  // const [numberOfMines,setNumberOfMines] = useState(2)
 
-  function makeGame(gridWidth,gridHeight,numberOfMines){
-    let minePositions = [];
-    let gridSize = gridWidth*gridHeight
-    while (minePositions.length < numberOfMines){
-      let position = Math.floor((Math.random()*gridSize))
-      if(!minePositions.includes(position)){
-        minePositions.push(position)
-      }  
-    }
-    let gameGrid = [];
-    for (let i = 0; i < gridHeight; i++){
-      let row = [];
-      for (let j = 0; j < gridWidth; j++){
-        row.push(false)
-      }
-      gameGrid.push(row)
-    }
-    for (let i = 0; i < minePositions.length; i++){
-      let position = minePositions[i]
-      let rowPosition = Math.floor((position) / gridWidth);
-      let columnPosition = position % gridWidth;
-      gameGrid[rowPosition][columnPosition] = true
-    }
-    setGameGrid(gameGrid)
+  const [state,dispatch] = useReducer(reducer,{width: 3, height: 3, mines: 2,gameGrid:[[true,false,false],[false,true,false],[false,false,false]]})
+
+  function handleChange(e){
+    dispatch({
+      type:'changeNumber',
+      field: e.target.name,
+      value: e.target.value
+    })
   }
 
   return (
@@ -47,8 +65,16 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <Board gameBoard={gameGrid}></Board>
-        <button onClick={()=>{makeGame(gridWidth,gridHeight,numberOfMines)}}>New Game</button>
+        <Board gameBoard={state.gameGrid}></Board>
+        <div className='settings'>
+          <label>Width: </label>
+          <input type='number' min={3} max={15} name='width' value={state.width} onChange={(e)=>handleChange(e)}/>
+          <label>Height: </label>
+          <input type='number' min={3} max={15} name='height' value={state.height} onChange={(e)=>handleChange(e)}/>
+          <label>Mines: </label>
+          <input type='number' min={3} max={Math.floor((state.width * state.height)/2)} name='mines' value={state.mines} onChange={(e)=>handleChange(e)}/>
+        </div>
+        <button onClick={()=>{dispatch({type:'newGame'})}}>New Game</button>
       </main>
 
       <footer className={styles.footer}>
