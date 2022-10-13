@@ -3,7 +3,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useState, useReducer } from 'react'
 import Board from '../components/Board'
-
+import getAdjacent from '../funcs/getAdjacent'
 
 
 export default function Home() {
@@ -33,20 +33,16 @@ export default function Home() {
           let position = minePositions[i]
           let rowPosition = Math.floor((position) / state.width);
           let columnPosition = position % state.width;
-          gameGrid[rowPosition][columnPosition] = true
+          gameGrid[rowPosition][columnPosition] = 'M'
         }
-        return {...state, gameGrid:gameGrid}
+        let game = getAdjacent(gameGrid)
+        return {...state, game:game}
       default:
         return state
     }
   }
 
-  // const [gameGrid,setGameGrid] = useState([[true,false,false],[false,true,false],[false,false,false]])
-  // const [gridWidth,setGridWidth] = useState(5)
-  // const [gridHeight,setGridHeight] = useState(4)
-  // const [numberOfMines,setNumberOfMines] = useState(2)
-
-  const [state,dispatch] = useReducer(reducer,{width: 3, height: 3, mines: 2,gameGrid:[[true,false,false],[false,true,false],[false,false,false]]})
+  const [state,dispatch] = useReducer(reducer,{width: 3, height: 3, mines: 3,game:[[true,false,false],[false,true,false],[false,true,false]]})
 
   function handleChange(e){
     dispatch({
@@ -65,7 +61,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <Board gameBoard={state.gameGrid}></Board>
+        <Board gameBoard={state.game}></Board>
         <div className='settings'>
           <label>Width: </label>
           <input type='number' min={3} max={15} name='width' value={state.width} onChange={(e)=>handleChange(e)}/>
