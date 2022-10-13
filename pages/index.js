@@ -1,9 +1,35 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { useState } from 'react'
 import Board
  from '../components/Board'
 export default function Home() {
+
+
+  const [mines,setMines] = useState([true,false,false,false,true,false,false,false,false])
+  const [gridSize,setGridSize] = useState(9)
+  const [numberOfMines,setNumberOfMines] = useState(2)
+
+  function makeGame(gridSize,numberOfMines){
+    let minePositions = [];
+    while (minePositions.length < numberOfMines){
+      let position = Math.floor(Math.random()*gridSize)
+      if(!minePositions.includes(position)){
+        minePositions.push(position)
+      }  
+    }
+    let gameGrid = [];
+    for (let i = 0; i < gridSize; i++){
+      if (minePositions.includes(i)){
+        gameGrid.push(true)
+      } else {
+        gameGrid.push(false)
+      }
+    }
+    setMines(gameGrid)
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,7 +39,8 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <Board></Board>
+        <Board gameBoard={mines}></Board>
+        <button onClick={()=>{makeGame(gridSize,numberOfMines)}}>New Game</button>
       </main>
 
       <footer className={styles.footer}>
