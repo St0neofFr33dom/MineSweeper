@@ -7,25 +7,37 @@ import Board
 export default function Home() {
 
 
-  const [mines,setMines] = useState([true,false,false,false,true,false,false,false,false])
-  const [gridSize,setGridSize] = useState(9)
+  const [mines,setMines] = useState([[true,false,false],[false,true,false],[false,false,false]])
+  const [gridWidth,setGridWidth] = useState(4)
+  const [gridHeight,setGridHeight] = useState(5)
   const [numberOfMines,setNumberOfMines] = useState(2)
 
-  function makeGame(gridSize,numberOfMines){
+  function makeGame(gridWidth,gridHeight,numberOfMines){
     let minePositions = [];
+    let gridSize = gridWidth*gridHeight
     while (minePositions.length < numberOfMines){
-      let position = Math.floor(Math.random()*gridSize)
+      let position = Math.floor((Math.random()*gridSize))
       if(!minePositions.includes(position)){
         minePositions.push(position)
       }  
     }
+    console.log(minePositions)
     let gameGrid = [];
-    for (let i = 0; i < gridSize; i++){
-      if (minePositions.includes(i)){
-        gameGrid.push(true)
-      } else {
-        gameGrid.push(false)
+    for (let i = 0; i < gridWidth; i++){
+      let row = [];
+      for (let j = 0; j < gridHeight; j++){
+        row.push(false)
       }
+      gameGrid.push(row)
+    }
+    for (let i = 0; i < minePositions.length; i++){
+      let position = minePositions[i]
+      console.log(position)
+      let rowPosition = Math.floor((position) / gridHeight);
+      console.log(`row = ${rowPosition}`)
+      let columnPosition = position % gridHeight;
+      console.log(`column = ${columnPosition}`)
+      gameGrid[rowPosition][columnPosition] = true
     }
     setMines(gameGrid)
   }
@@ -40,7 +52,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <Board gameBoard={mines}></Board>
-        <button onClick={()=>{makeGame(gridSize,numberOfMines)}}>New Game</button>
+        <button onClick={()=>{makeGame(gridWidth,gridHeight,numberOfMines)}}>New Game</button>
       </main>
 
       <footer className={styles.footer}>

@@ -1,13 +1,13 @@
 import React from 'react'
-import Tile from '../Tile'
+import Row from '../Row'
 import styles from './styles.module.css'
 
 const Board = ({gameBoard}) => {
 
     return (
         <div className={styles.board}>
-            {gameBoard.map((isMine,index)=>{
-                return <Tile key={index} mine={isMine}/>
+            {gameBoard.map((row,index)=>{
+                return <Row tiles={row} key={index} />
                 })}
         </div>
     )
