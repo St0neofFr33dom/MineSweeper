@@ -7,9 +7,9 @@ import Board
 export default function Home() {
 
 
-  const [mines,setMines] = useState([[true,false,false],[false,true,false],[false,false,false]])
-  const [gridWidth,setGridWidth] = useState(4)
-  const [gridHeight,setGridHeight] = useState(5)
+  const [gameGrid,setGameGrid] = useState([[true,false,false],[false,true,false],[false,false,false]])
+  const [gridWidth,setGridWidth] = useState(5)
+  const [gridHeight,setGridHeight] = useState(4)
   const [numberOfMines,setNumberOfMines] = useState(2)
 
   function makeGame(gridWidth,gridHeight,numberOfMines){
@@ -21,25 +21,21 @@ export default function Home() {
         minePositions.push(position)
       }  
     }
-    console.log(minePositions)
     let gameGrid = [];
-    for (let i = 0; i < gridWidth; i++){
+    for (let i = 0; i < gridHeight; i++){
       let row = [];
-      for (let j = 0; j < gridHeight; j++){
+      for (let j = 0; j < gridWidth; j++){
         row.push(false)
       }
       gameGrid.push(row)
     }
     for (let i = 0; i < minePositions.length; i++){
       let position = minePositions[i]
-      console.log(position)
-      let rowPosition = Math.floor((position) / gridHeight);
-      console.log(`row = ${rowPosition}`)
-      let columnPosition = position % gridHeight;
-      console.log(`column = ${columnPosition}`)
+      let rowPosition = Math.floor((position) / gridWidth);
+      let columnPosition = position % gridWidth;
       gameGrid[rowPosition][columnPosition] = true
     }
-    setMines(gameGrid)
+    setGameGrid(gameGrid)
   }
 
   return (
@@ -51,7 +47,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <Board gameBoard={mines}></Board>
+        <Board gameBoard={gameGrid}></Board>
         <button onClick={()=>{makeGame(gridWidth,gridHeight,numberOfMines)}}>New Game</button>
       </main>
 
