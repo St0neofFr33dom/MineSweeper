@@ -9,6 +9,15 @@ export default function Home() {
       case "newGame": {
         return { ...state, settings: true };
       }
+      case "difficulty": {
+        switch(action.value){
+          case 'easy': return {...state, difficulty:action.value, width:5,height:5, mines:10}
+          case 'medium': return {...state, difficulty:action.value, width:10,height:10, mines:30}
+          case 'hard': return {...state, difficulty:action.value, width:20,height:20, mines:80}
+          case 'custom': return {...state, difficulty:action.value}
+          default: return state
+        }
+      }
       case "changeNumber":
         return { ...state, [action.field]: action.value };
       case "createGame":
@@ -43,6 +52,7 @@ export default function Home() {
 
   const [state, dispatch] = useReducer(reducer, {
     settings: true,
+    difficulty: 'easy',
     width: 3,
     height: 3,
     mines: 3,
@@ -65,12 +75,19 @@ export default function Home() {
     return (
       <main>
         <h1>Welcome to a Minesweeper-like game!</h1>
-        <div className="settings">
+        <label forhtml='difficulty'>Difficulty: </label>
+        <select id='difficulty' name='difficulty' onChange={(e)=>{dispatch({type:'difficulty',value:e.target.value})}}>
+          <option value='easy'>Easy</option>
+          <option value='medium'>Medium</option>
+          <option value='hard'>Hard</option>
+          <option value='custom'>Custom</option>
+        </select>
+        {(state.difficulty === 'custom') && <div className="settings">
           <label>Width: </label>
           <input
             type="number"
             min={3}
-            max={15}
+            max={25}
             name="width"
             value={state.width}
             onChange={(e) => handleChange(e)}
@@ -79,7 +96,7 @@ export default function Home() {
           <input
             type="number"
             min={3}
-            max={15}
+            max={25}
             name="height"
             value={state.height}
             onChange={(e) => handleChange(e)}
@@ -93,6 +110,7 @@ export default function Home() {
             value={state.mines}
             onChange={(e) => handleChange(e)}
           />
+        </div>}
           <button
             onClick={() => {
               dispatch({ type: "createGame" });
@@ -100,7 +118,6 @@ export default function Home() {
           >
             Create Game
           </button>
-        </div>
       </main>
     );
   } else {
