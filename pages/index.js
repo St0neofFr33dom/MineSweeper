@@ -42,7 +42,7 @@ export default function Home() {
     }
   }
 
-  const [state,dispatch] = useReducer(reducer,{width: 3, height: 3, mines: 3,game:[[true,false,false],[false,true,false],[false,true,false]]})
+  const [state,dispatch] = useReducer(reducer,{width: 3, height: 3, mines: 3,game:[['M',2,1],[3,'M',2],[2,'M',2]]})
 
   function handleChange(e){
     dispatch({
