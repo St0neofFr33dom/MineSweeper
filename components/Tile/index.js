@@ -1,20 +1,26 @@
-import React, {useState} from 'react'
+import React, {useState, useContext, useCallback} from 'react'
 import styles from './style.module.css'
+import gameContext from '../../context/gameContext'
 
-const Tile = ({mine}) => {
+const Tile = ({content}) => {
 
+    const {state,dispatch} = useContext(gameContext) 
+    
+    const [status,setStatus] = useState('unclicked')
+    const [style,setStyle] = useState({color:'#000'})
     const [tileContent,setTileContent] = useState()
 
     function reveal(e){
-        if(e.target.dataset.status !== 'unclicked'){return}
+        if(status !== 'unclicked'){return}
         if(e.target.dataset.content === 'M'){
                 e.target.className = styles.mine
-                e.target.dataset.status = 'clicked'
+                setStatus('clicked')
                 setTileContent(e.target.dataset.content)
                 return
         }
         e.target.className = styles.tile
-        e.target.dataset.status = 'clicked'
+        setStatus('clicked')
+        setStyle(getColour(content))
         setTileContent(e.target.dataset.content)
         return
         
@@ -23,18 +29,20 @@ const Tile = ({mine}) => {
 
     function mark(e){
         e.preventDefault()
-        if(e.target.dataset.status === 'clicked'){return}
-        switch(e.target.dataset.status){
+        if(status === 'clicked'){return}
+        switch(status){
             case 'unclicked':
-                e.target.dataset.status = 'marked'
+                setStatus('marked')
+                dispatch({type:'decrementFlag'})
                 setTileContent("F")
                 return
             case 'marked':
-                e.target.dataset.status = 'unsure'
+                setStatus('unsure')
+                dispatch({type:'incrementFlag'})
                 setTileContent("?")
                 return
             case 'unsure':
-                e.target.dataset.status = 'unclicked'
+                setStatus('unclicked')
                 setTileContent("")
                 return
             default:
@@ -59,7 +67,7 @@ const Tile = ({mine}) => {
     }
 
     return (
-        <div className={styles.unclicked} style={getColour(mine)} onClick={(e)=>{reveal(e)}} onContextMenu={(e)=>{mark(e)}} data-content={mine} data-status='unclicked'>
+        <div className={styles.unclicked} style={style} onClick={(e)=>{reveal(e)}} onContextMenu={(e)=>{mark(e)}} data-content={content}>
             {tileContent}
         </div>
     )
