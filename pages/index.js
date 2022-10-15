@@ -1,9 +1,11 @@
 import styles from "../styles/Home.module.css";
-import { useState, useReducer } from "react";
+import { useState, useReducer, useContext } from "react";
 import Board from "../components/Board";
 import getAdjacent from "../funcs/getAdjacent";
+import gameContext from "../context/gameContext";
 
 export default function Home() {
+
   function reducer(state, action) {
     switch (action.type) {
       case "newGame": {
@@ -11,8 +13,8 @@ export default function Home() {
       }
       case "difficulty": {
         switch(action.value){
-          case 'easy': return {...state, difficulty:action.value, width:5,height:5, mines:10}
-          case 'medium': return {...state, difficulty:action.value, width:10,height:10, mines:30}
+          case 'easy': return {...state, difficulty:action.value, width:7,height:7, mines:10}
+          case 'medium': return {...state, difficulty:action.value, width:12,height:12, mines:40}
           case 'hard': return {...state, difficulty:action.value, width:20,height:20, mines:80}
           case 'custom': return {...state, difficulty:action.value}
           default: return state
@@ -44,7 +46,11 @@ export default function Home() {
           gameGrid[rowPosition][columnPosition] = "M";
         }
         let game = getAdjacent(gameGrid);
-        return { ...state, game: game, settings: false };
+        return { ...state, game: game, settings: false, flagsLeft: state.mines };
+      case 'decrementFlag':
+        return {...state, flagsLeft: state.flagsLeft - 1}
+      case 'incrementFlag':
+        return {...state, flagsLeft: state.flagsLeft + 1}
       default:
         return state;
     }
@@ -53,15 +59,14 @@ export default function Home() {
   const [state, dispatch] = useReducer(reducer, {
     settings: true,
     difficulty: 'easy',
-    width: 3,
-    height: 3,
-    mines: 3,
-    game: [
-      ["M", 2, 1],
-      [3, "M", 2],
-      [2, "M", 2],
-    ],
+    width: 7,
+    height: 7,
+    mines: 10,
+    game: [],
+    flagsLeft:0,
   });
+
+
 
   function handleChange(e) {
     dispatch({
@@ -122,7 +127,9 @@ export default function Home() {
     );
   } else {
     return (
+      <gameContext.Provider value={{state,dispatch}}>
       <main className={styles.main}>
+
         <Board gameBoard={state.game}></Board>
 
         <button
@@ -132,7 +139,15 @@ export default function Home() {
         >
           New Game
         </button>
+        <button
+          onClick={() => {
+            dispatch({ type: "createGame" });
+          }}
+        >
+          Reset
+        </button>
       </main>
+      </gameContext.Provider>
     );
   }
 }
