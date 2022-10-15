@@ -15,14 +15,14 @@ const Board = () => {
             <div>
                 <h4>Flags left: {state.flagsLeft}</h4>
             </div>
-            {gameBoard.map((row,index)=>{
+            {gameBoard.map((row,i)=>{
                 return(
-                    <div key={Math.floor(Math.random()*1000000)} style={{display:'flex', flexDirection:'row'}}>
-                        {row.map((content)=> {return <Tile key={Math.floor(Math.random()*1000000)} content={content}/>})}
+                    <div key={`r${i}`} style={{display:'flex', flexDirection:'row'}}>
+                        {row.map((content,j)=> {return <Tile key={`t${i}${j}`} content={content}/>})}
                     </div>
                 ) 
                 })}
-            <button onClick={(()=>{console.log(gameContext)})}>test</button>
+            <button onClick={(()=>{console.log(state)})}>test</button>
         </div>
     )
 }

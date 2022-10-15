@@ -127,7 +127,7 @@ export default function Home() {
     );
   } else {
     return (
-      <gameContext.Provider value={{state,dispatch}}>
+      <gameContext.Provider value={{state,dispatch,}}>
       <main className={styles.main}>
 
         <Board gameBoard={state.game}></Board>
