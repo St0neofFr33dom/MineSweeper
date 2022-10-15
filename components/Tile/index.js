@@ -2,7 +2,7 @@ import React, {useState, useContext, useCallback} from 'react'
 import styles from './style.module.css'
 import gameContext from '../../context/gameContext'
 
-const Tile = ({mine}) => {
+const Tile = ({content}) => {
 
     const {state,dispatch} = useContext(gameContext) 
     
@@ -66,7 +66,7 @@ const Tile = ({mine}) => {
     }
 
     return (
-        <div className={styles.unclicked} style={getColour(mine)} onClick={(e)=>{reveal(e)}} onContextMenu={(e)=>{mark(e)}} data-content={mine}>
+        <div className={styles.unclicked} style={getColour(content)} onClick={(e)=>{reveal(e)}} onContextMenu={(e)=>{mark(e)}} data-content={content}>
             {tileContent}
         </div>
     )
