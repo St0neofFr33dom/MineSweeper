@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import Row from '../Row'
+import Tile from '../Tile'
 import styles from './styles.module.css'
 
 const Board = ({gameBoard}) => {
@@ -7,7 +7,11 @@ const Board = ({gameBoard}) => {
     return (
         <div className={styles.board}>
             {gameBoard.map((row,index)=>{
-                return <Row tiles={row} key={index} />
+                return (
+                    <div key={index} style={{display:'flex',flexDirection:'row'}}>
+                        {row.map((content)=> {return (<Tile key={Math.floor(Math.random()*1000000)} mine={content}/>)})}
+                    </div>
+                )
                 })}
         </div>
     )
