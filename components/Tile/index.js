@@ -7,7 +7,7 @@ const Tile = ({content}) => {
     const {state,dispatch} = useContext(gameContext) 
     
     const [status,setStatus] = useState('unclicked')
-
+    const [style,setStyle] = useState({color:'#000'})
     const [tileContent,setTileContent] = useState()
 
     function reveal(e){
@@ -20,6 +20,7 @@ const Tile = ({content}) => {
         }
         e.target.className = styles.tile
         setStatus('clicked')
+        setStyle(getColour(content))
         setTileContent(e.target.dataset.content)
         return
         
@@ -66,7 +67,7 @@ const Tile = ({content}) => {
     }
 
     return (
-        <div className={styles.unclicked} style={getColour(content)} onClick={(e)=>{reveal(e)}} onContextMenu={(e)=>{mark(e)}} data-content={content}>
+        <div className={styles.unclicked} style={style} onClick={(e)=>{reveal(e)}} onContextMenu={(e)=>{mark(e)}} data-content={content}>
             {tileContent}
         </div>
     )
