@@ -3,7 +3,7 @@ import createGame from "./createGame";
 export default function reducer(state, action) {
     switch (action.type) {
       case "newGame": {
-        return { ...state, settings: true };
+        return { ...state, gameStatus:'settings' };
       }
       case "difficulty": {
         switch(action.value){

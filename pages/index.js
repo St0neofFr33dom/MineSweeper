@@ -42,7 +42,7 @@ export default function Home() {
       <main>
         <h1>Welcome to a Minesweeper-like game!</h1>
         <label forhtml='difficulty'>Difficulty: </label>
-        <select id='difficulty' name='difficulty' onChange={(e)=>{dispatch({type:'difficulty',value:e.target.value})}}>
+        <select id='difficulty' value={state.difficulty} name='difficulty' onChange={(e)=>{dispatch({type:'difficulty',value:e.target.value})}}>
           <option value='easy'>Easy</option>
           <option value='medium'>Medium</option>
           <option value='hard'>Hard</option>
