@@ -12,16 +12,16 @@ const Tile = ({content}) => {
 
     function reveal(e){
         if(status !== 'unclicked'){return}
-        if(e.target.dataset.content === 'M'){
+        if(content === 'M'){
                 e.target.className = styles.mine
                 setStatus('clicked')
-                setTileContent(e.target.dataset.content)
+                dispatch({type:'gameOver'})
                 return
         }
         e.target.className = styles.tile
         setStatus('clicked')
         setStyle(getColour(content))
-        setTileContent(e.target.dataset.content)
+        setTileContent(content)
         return
         
     }
@@ -66,11 +66,30 @@ const Tile = ({content}) => {
         }
     }
 
-    return (
-        <div className={styles.unclicked} style={style} onClick={(e)=>{reveal(e)}} onContextMenu={(e)=>{mark(e)}} data-content={content}>
+    if (state.gameStatus === 'gameOver'){
+      
+            if(content === 'M'){
+                return(
+                <div className={styles.mine}>
+                    {content}
+                </div>
+                )
+            }
+            else{
+                return(
+
+                <div className={styles.unclicked}>
+                    {tileContent}
+                </div>
+                )
+            }
+        
+    }
+    else {return (
+        <div className={styles.unclicked} style={style} onClick={(e)=>{reveal(e)}} onContextMenu={(e)=>{mark(e)}}>
             {tileContent}
         </div>
-    )
+    )}
 }
 
 export default Tile

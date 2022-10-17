@@ -9,9 +9,10 @@ const Board = () => {
     const{state,dispatch} = useContext(gameContext)
 
     const gameBoard = state.game
+    const boardKey = state.boardKey
 
     return (
-        <div className={styles.board}>
+        <div className={styles.board} key={boardKey}>
             <div>
                 <h4>Flags left: {state.flagsLeft}</h4>
             </div>

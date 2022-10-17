@@ -1,4 +1,4 @@
-import getAdjacent from "./getAdjacent";
+import createGame from "./createGame";
 
 export default function reducer(state, action) {
     switch (action.type) {
@@ -17,35 +17,19 @@ export default function reducer(state, action) {
       case "changeNumber":
         return { ...state, [action.field]: action.value };
       case "createGame":
-        let minePositions = [];
-        let gridSize = state.width * state.height;
-        while (minePositions.length < state.mines) {
-          let position = Math.floor(Math.random() * gridSize);
-          if (!minePositions.includes(position)) {
-            minePositions.push(position);
-          }
-        }
-        let gameGrid = [];
-        for (let i = 0; i < state.height; i++) {
-          let row = [];
-          for (let j = 0; j < state.width; j++) {
-            row.push(false);
-          }
-          gameGrid.push(row);
-        }
-        for (let i = 0; i < minePositions.length; i++) {
-          let position = minePositions[i];
-          let rowPosition = Math.floor(position / state.width);
-          let columnPosition = position % state.width;
-          gameGrid[rowPosition][columnPosition] = "M";
-        }
-        let game = getAdjacent(gameGrid);
-        return { ...state, game: game, settings: false, flagsLeft: state.mines };
+        let game = createGame(state)
+        return { ...state, game: game, gameStatus: 'playing', flagsLeft: state.mines };
+      case "resetGame":
+        let key = Math.floor(Math.random()*1000000)
+        return { ...state, game: game, boardKey:key};
       case 'decrementFlag':
         return {...state, flagsLeft: state.flagsLeft - 1}
       case 'incrementFlag':
         return {...state, flagsLeft: state.flagsLeft + 1}
+      case 'gameOver':
+        return {...state, gameStatus:'gameOver'}
       default:
+        console.log('Unknown command')
         return state;
     }
   }

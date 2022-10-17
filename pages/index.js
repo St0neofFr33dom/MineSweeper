@@ -9,13 +9,14 @@ export default function Home() {
   
 
   const [state, dispatch] = useReducer(reducer, {
-    settings: true,
+    gameStatus: 'settings',
     difficulty: 'easy',
     width: 7,
     height: 7,
     mines: 10,
     game: [],
     flagsLeft:0,
+    boardKey: 0
   });
 
 
@@ -28,7 +29,15 @@ export default function Home() {
     });
   }
 
-  if (state.settings) {
+  function resetBoard() {
+    dispatch({
+      type:'resetGame'
+    })
+    dispatch({
+      type:'createGame'
+    })
+  }
+  if (state.gameStatus === 'settings') {
     return (
       <main>
         <h1>Welcome to a Minesweeper-like game!</h1>
@@ -90,6 +99,11 @@ export default function Home() {
           }}
         >
           New Game
+        </button>
+        <button
+          onClick={resetBoard}
+        >
+          Reset
         </button>
       </main>
       </gameContext.Provider>
