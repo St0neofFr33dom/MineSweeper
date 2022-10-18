@@ -24,14 +24,7 @@ export default function Home() {
     });
   }
 
-  function resetBoard() {
-    dispatch({
-      type: "resetGame",
-    });
-    dispatch({
-      type: "createGame",
-    });
-  }
+  
   if (state.gameStatus === "settings") {
     return (
       <main>
@@ -103,7 +96,9 @@ export default function Home() {
           >
             New Game
           </button>
-          <button onClick={resetBoard}>Reset</button>
+          <button onClick={() => {
+            dispatch({ type: "createGame" });
+          }}>Reset</button>
         </main>
       </gameContext.Provider>
     );

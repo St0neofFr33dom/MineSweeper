@@ -41,21 +41,23 @@ export default function reducer(state, action) {
       return { ...state, [action.field]: action.value };
     case "createGame":
       let game = createGame(state);
+      let key = Math.floor(Math.random() * 1000000);
       return {
         ...state,
         game: game,
         gameStatus: "playing",
         flagsLeft: state.mines,
+        boardKey: key,
+        time: 0,
       };
-    case "resetGame":
-      let key = Math.floor(Math.random() * 1000000);
-      return { ...state, game: game, boardKey: key };
     case "decrementFlag":
       return { ...state, flagsLeft: state.flagsLeft - 1 };
     case "incrementFlag":
       return { ...state, flagsLeft: state.flagsLeft + 1 };
     case "gameOver":
       return { ...state, gameStatus: "gameOver" };
+    case "timer":
+      return {...state, time: state.time + 1}
     default:
       console.log("Unknown command");
       return state;

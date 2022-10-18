@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Tile from "../Tile";
 import styles from "./styles.module.css";
 import gameContext from "../../context/gameContext";
@@ -8,6 +8,31 @@ const Board = () => {
 
   const gameBoard = state.game;
   const boardKey = state.boardKey;
+  const time = state.time
+
+  useEffect(() => {
+    switch(state.gameStatus){
+      case 'playing':
+        const timer = setInterval(() => {
+          dispatch({type:'timer'});
+        }, 1000);
+    
+        return () => clearInterval(timer)
+      case 'gameOver': return () => clearInterval(timer)
+      case 'settings': return () => clearInterval(timer);
+      default: return
+    }
+  },[state.gameStatus,dispatch])
+
+  //   const timer = setInterval(() => {
+  //     setTime(time+1);
+  //   }, 1000);
+
+  //   return () => clearInterval(timer)
+  // }),[state.gameStatus];
+
+
+
 
   return (
     <div className={styles.board} key={boardKey}>
