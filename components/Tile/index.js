@@ -80,7 +80,7 @@ const Tile = ({ content }) => {
     }
   }
 
-  if (state.gameStatus === "gameOver") {
+  if (state.gameStatus !== "playing") {
     if (content === "M") {
       return <div className={styles.mine}>{content}</div>;
     } else {

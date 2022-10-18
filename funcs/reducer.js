@@ -58,6 +58,8 @@ export default function reducer(state, action) {
       return { ...state, [parameter]: state[parameter] + 1 };
     case "gameOver":
       return { ...state, gameStatus: "gameOver" };
+    case "victory":
+      return {...state, gameStatus: "victory"}
     default:
       console.log("Unknown command");
       return state;
