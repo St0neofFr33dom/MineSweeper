@@ -14,7 +14,7 @@ const Board = () => {
     switch(state.gameStatus){
       case 'playing':
         const timer = setInterval(() => {
-          dispatch({type:'timer'});
+          dispatch({type:'increment',field:'time'});
         }, 1000);
     
         return () => clearInterval(timer)

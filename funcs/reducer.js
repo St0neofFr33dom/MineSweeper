@@ -1,6 +1,7 @@
 import createGame from "./createGame";
 
 export default function reducer(state, action) {
+  let parameter = action.field
   switch (action.type) {
     case "newGame": {
       return { ...state, gameStatus: "settings" };
@@ -38,7 +39,7 @@ export default function reducer(state, action) {
       }
     }
     case "changeNumber":
-      return { ...state, [action.field]: action.value };
+      return { ...state, [parameter]: action.value };
     case "createGame":
       let game = createGame(state);
       let key = Math.floor(Math.random() * 1000000);
@@ -51,16 +52,12 @@ export default function reducer(state, action) {
         time: 0,
         clicks: 0,
       };
-    case "decrementFlag":
-      return { ...state, flagsLeft: state.flagsLeft - 1 };
-    case "incrementFlag":
-      return { ...state, flagsLeft: state.flagsLeft + 1 };
+    case "decrement":
+      return { ...state, [parameter]: state[parameter] - 1 };
+    case "increment":
+      return { ...state, [parameter]: state[parameter] + 1 };
     case "gameOver":
       return { ...state, gameStatus: "gameOver" };
-    case "timer":
-      return {...state, time: state.time + 1}
-    case 'click':
-      return {...state, clicks: state.clicks+1}
     default:
       console.log("Unknown command");
       return state;

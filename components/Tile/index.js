@@ -20,7 +20,7 @@ const Tile = ({ content }) => {
       return;
     }
     e.target.className = styles.tile;
-    dispatch({type:'click'})
+    dispatch({type:'increment',field:'clicks'})
     setStatus("clicked");
     setStyle(getColour(content));
     setTileContent(content);
@@ -34,13 +34,14 @@ const Tile = ({ content }) => {
     }
     switch (status) {
       case "unclicked":
+        if(state.flagsLeft === 0){return}
         setStatus("marked");
-        dispatch({ type: "decrementFlag" });
+        dispatch({ type: "decrement", field:'flagsLeft' });
         setTileContent("F");
         return;
       case "marked":
         setStatus("unsure");
-        dispatch({ type: "incrementFlag" });
+        dispatch({ type: "increment", field:'flagsLeft' });
         setTileContent("?");
         return;
       case "unsure":
