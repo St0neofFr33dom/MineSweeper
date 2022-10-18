@@ -14,6 +14,8 @@ export default function Home() {
     game: [],
     flagsLeft: 0,
     boardKey: 0,
+    time: 0,
+    clicks: 0,
   });
 
   function handleChange(e) {

@@ -20,6 +20,7 @@ const Tile = ({ content }) => {
       return;
     }
     e.target.className = styles.tile;
+    dispatch({type:'click'})
     setStatus("clicked");
     setStyle(getColour(content));
     setTileContent(content);

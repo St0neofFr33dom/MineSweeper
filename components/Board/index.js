@@ -24,15 +24,6 @@ const Board = () => {
     }
   },[state.gameStatus,dispatch])
 
-  //   const timer = setInterval(() => {
-  //     setTime(time+1);
-  //   }, 1000);
-
-  //   return () => clearInterval(timer)
-  // }),[state.gameStatus];
-
-
-
 
   return (
     <div className={styles.board} key={boardKey}>

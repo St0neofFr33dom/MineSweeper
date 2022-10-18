@@ -21,7 +21,7 @@ export default function reducer(state, action) {
             difficulty: action.value,
             width: 12,
             height: 12,
-            mines: 40,
+            mines: 60,
           };
         case "hard":
           return {
@@ -29,7 +29,7 @@ export default function reducer(state, action) {
             difficulty: action.value,
             width: 20,
             height: 20,
-            mines: 80,
+            mines: 120,
           };
         case "custom":
           return { ...state, difficulty: action.value };
@@ -49,6 +49,7 @@ export default function reducer(state, action) {
         flagsLeft: state.mines,
         boardKey: key,
         time: 0,
+        clicks: 0,
       };
     case "decrementFlag":
       return { ...state, flagsLeft: state.flagsLeft - 1 };
@@ -58,6 +59,8 @@ export default function reducer(state, action) {
       return { ...state, gameStatus: "gameOver" };
     case "timer":
       return {...state, time: state.time + 1}
+    case 'click':
+      return {...state, clicks: state.clicks+1}
     default:
       console.log("Unknown command");
       return state;
