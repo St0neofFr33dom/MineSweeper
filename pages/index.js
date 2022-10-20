@@ -20,7 +20,7 @@ export default function Home() {
 
   function handleChange(e) {
     dispatch({
-      type: "changeNumber",
+      type: "changeValue",
       field: e.target.name,
       value: e.target.value,
     });
