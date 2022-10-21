@@ -1,17 +1,16 @@
 import React, { useState, useContext, useCallback } from "react";
 import styles from "./style.module.css";
 import gameContext from "../../context/gameContext";
+import clickAdjacent from "../../funcs/clickAdjacent";
 
 const Tile = ({ tile, row, column }) => {
   const { state, dispatch } = useContext(gameContext);
   const content = tile.content
-  const [status, setStatus] = useState(tile.status);
   const [tileContent, setTileContent] = useState();
 
-  function safeClick(){
+  function safeClick(row,column){
     dispatch({type:'increment',field:'clicks'})
     dispatch({type:"changeTile",row:row,column:column,status:"clicked"})
-    setTileContent(content);
   }
 
   function reveal() {
@@ -22,7 +21,10 @@ const Tile = ({ tile, row, column }) => {
       dispatch({ type: "gameOver" });
       return;
     }
-    safeClick()
+    safeClick(row,column)
+    if (content === 0){
+      clickAdjacent(state.game,safeClick,row,column)
+    }
     return;
   }
 
@@ -80,7 +82,7 @@ const Tile = ({ tile, row, column }) => {
   }
 
   if (tile.status === "clicked"){
-    return <div className={styles.tile} style={getColour(content)}>{tileContent}</div>
+    return <div className={styles.tile} style={getColour(content)}>{content}</div>
   }
   else if (state.gameStatus !== "playing") {
     if (content === "M") {
