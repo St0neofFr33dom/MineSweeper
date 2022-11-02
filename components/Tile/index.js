@@ -1,51 +1,52 @@
 import React, { useState, useContext, useCallback } from "react";
 import styles from "./style.module.css";
 import gameContext from "../../context/gameContext";
+import clickAdjacent from "../../funcs/clickAdjacent";
 
-const Tile = ({ content }) => {
+const Tile = ({ tile, row, column }) => {
   const { state, dispatch } = useContext(gameContext);
-
-  const [status, setStatus] = useState("unclicked");
-  const [style, setStyle] = useState({ color: "#000" });
+  const content = tile.content
   const [tileContent, setTileContent] = useState();
 
-  function reveal(e) {
-    if (status !== "unclicked") {
+  function safeClick(row,column){
+    dispatch({type:'increment',field:'clicks'})
+    dispatch({type:"changeTile",row:row,column:column,status:"clicked"})
+  }
+
+  function reveal() {
+    if (tile.status !== "unclicked") {
       return;
     }
     if (content === "M") {
-      e.target.className = styles.mine;
-      setStatus("clicked");
       dispatch({ type: "gameOver" });
       return;
     }
-    e.target.className = styles.tile;
-    dispatch({type:'increment',field:'clicks'})
-    setStatus("clicked");
-    setStyle(getColour(content));
-    setTileContent(content);
+    safeClick(row,column)
+    if (content === 0){
+      clickAdjacent(state.game,safeClick,row,column)
+    }
     return;
   }
 
   function mark(e) {
     e.preventDefault();
-    if (status === "clicked") {
+    if (tile.status === "clicked") {
       return;
     }
-    switch (status) {
+    switch (tile.status) {
       case "unclicked":
         if(state.flagsLeft === 0){return}
-        setStatus("marked");
+        dispatch({type:"changeTile",row:row,column:column,status:"marked"});
         dispatch({ type: "decrement", field:'flagsLeft' });
         setTileContent("F");
         return;
       case "marked":
-        setStatus("unsure");
+        dispatch({type:"changeTile",row:row,column:column,status:"unsure"});
         dispatch({ type: "increment", field:'flagsLeft' });
         setTileContent("?");
         return;
       case "unsure":
-        setStatus("unclicked");
+        dispatch({type:"changeTile",row:row,column:column,status:"unclicked"});
         setTileContent("");
         return;
       default:
@@ -80,28 +81,30 @@ const Tile = ({ content }) => {
     }
   }
 
-  if (state.gameStatus !== "playing") {
+  if (tile.status === "clicked"){
+    return <div className={styles.tile} style={getColour(content)}>{content}</div>
+  }
+  else if (state.gameStatus !== "playing") {
     if (content === "M") {
       return <div className={styles.mine}>{content}</div>;
     } else {
-      return <div className={styles.unclicked}>{tileContent}</div>;
+      return <div className={styles.unclicked}></div>;
+  } 
+}else {
+      return (
+        <div
+          className={styles.unclicked}
+          onClick={() => {
+            reveal();
+          }}
+          onContextMenu={(e) => {
+            mark(e);
+          }}
+        >
+          {tileContent}
+        </div>
+      );
     }
-  } else {
-    return (
-      <div
-        className={styles.unclicked}
-        style={style}
-        onClick={(e) => {
-          reveal(e);
-        }}
-        onContextMenu={(e) => {
-          mark(e);
-        }}
-      >
-        {tileContent}
-      </div>
-    );
-  }
 };
 
 export default Tile;

@@ -43,8 +43,8 @@ const Board = () => {
       {gameBoard.map((row, i) => {
         return (
           <div key={`r${i}`} style={{ display: "flex", flexDirection: "row" }}>
-            {row.map((content, j) => {
-              return <Tile key={`t${i}${j}`} content={content} />;
+            {row.map((tile, j) => {
+              return <Tile key={`t${i}${j}`} tile={tile} row={i} column={j}/>;
             })}
           </div>
         );

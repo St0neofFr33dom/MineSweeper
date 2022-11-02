@@ -6,6 +6,10 @@ export default function reducer(state, action) {
     case "newGame": {
       return { ...state, gameStatus: "settings" };
     }
+    case "gameOver":
+      return { ...state, gameStatus: "gameOver" };
+    case "victory":
+      return {...state, gameStatus: "victory"}
     case "difficulty": {
       switch (action.value) {
         case "easy":
@@ -38,8 +42,6 @@ export default function reducer(state, action) {
           return state;
       }
     }
-    case "changeNumber":
-      return { ...state, [parameter]: action.value };
     case "createGame":
       let game = createGame(state);
       let key = Math.floor(Math.random() * 1000000);
@@ -52,14 +54,17 @@ export default function reducer(state, action) {
         time: 0,
         clicks: 0,
       };
+    case "changeValue":
+      return { ...state, [parameter]: action.value };
     case "decrement":
       return { ...state, [parameter]: state[parameter] - 1 };
     case "increment":
       return { ...state, [parameter]: state[parameter] + 1 };
-    case "gameOver":
-      return { ...state, gameStatus: "gameOver" };
-    case "victory":
-      return {...state, gameStatus: "victory"}
+    case "changeTile":
+      let newGrid = [...state.game]
+      let targettedTile = newGrid[action.row][action.column]
+      newGrid[action.row][action.column] = {...targettedTile,status:action.status}
+      return {...state, game:newGrid}
     default:
       console.log("Unknown command");
       return state;

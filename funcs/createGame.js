@@ -78,8 +78,13 @@ function getAdjacent(gameGrid) {
   return gameGrid;
 }
 
+function setStatus(gameGrid){
+  return gameGrid.map((row)=>{return row.map((value)=>{return {content:value, status:'unclicked'}})})
+} 
+
 export default function createGame(state) {
   let gameGrid = prepareGrid(state);
-  let game = getAdjacent(gameGrid);
+  let partialGame = getAdjacent(gameGrid);
+  let game = setStatus(partialGame)
   return game;
 }
