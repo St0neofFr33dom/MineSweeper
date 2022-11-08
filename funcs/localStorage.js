@@ -2,7 +2,6 @@
     const getItem = (key) => {
     const isBrowser = (() => typeof window !== 'undefined')()
         if (isBrowser){
-            console.log("Browser is true")
             if (window['localStorage'][key] === undefined){
                 return '0'
             }
@@ -17,6 +16,8 @@
     const setItem = (key, value) => {
         const isBrowser = (() => typeof window !== 'undefined')()
       if (isBrowser) {
+        console.log(`Key = ${key}`)
+        console.log(`Value = ${value}`)
         window['localStorage'].setItem(key, value);
         return true;
       }

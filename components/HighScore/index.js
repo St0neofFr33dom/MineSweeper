@@ -6,8 +6,10 @@ const HighScore = (difficulty) => {
 const [score,setScore] = useState('0')
 
     useEffect(()=>{
-        setScore(getItem(difficulty))
+        let storedScore = getItem(difficulty.difficulty)
+        setScore(storedScore)
     },[difficulty])
+
     return (
             <>
                 <h3>Hi-Score</h3>

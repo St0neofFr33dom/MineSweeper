@@ -94,7 +94,6 @@ export default function Home() {
       <gameContext.Provider value={{ state, dispatch }}>
         <main className={styles.main}>
           <Board gameBoard={state.game}></Board>
-
           <button
             onClick={() => {
               dispatch({ type: "newGame" });
