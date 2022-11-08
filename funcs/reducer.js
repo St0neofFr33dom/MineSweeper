@@ -1,4 +1,5 @@
 import createGame from "./createGame";
+import { getItem, setItem } from "./localStorage";
 
 export default function reducer(state, action) {
   let parameter = action.field
@@ -9,6 +10,7 @@ export default function reducer(state, action) {
     case "gameOver":
       return { ...state, gameStatus: "gameOver" };
     case "victory":
+      setItem(state.difficulty, state.time)
       return {...state, gameStatus: "victory"}
     case "difficulty": {
       switch (action.value) {
