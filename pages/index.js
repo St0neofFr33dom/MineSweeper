@@ -3,6 +3,8 @@ import { useState, useReducer } from "react";
 import Board from "../components/Board";
 import reducer from "../funcs/reducer";
 import gameContext from "../context/gameContext";
+import {getItem,setItem,removeItem} from "../funcs/localStorage";
+import HighScore from "../components/HighScore";
 
 export default function Home() {
   const [state, dispatch] = useReducer(reducer, {
@@ -25,7 +27,6 @@ export default function Home() {
       value: e.target.value,
     });
   }
-
   
   if (state.gameStatus === "settings") {
     return (
@@ -75,6 +76,9 @@ export default function Home() {
               onChange={(e) => handleChange(e)}
             />
           </div>
+        )}
+        {state.difficulty !== "custom" && (
+          <HighScore difficulty={state.difficulty}/>
         )}
         <button
           onClick={() => {
