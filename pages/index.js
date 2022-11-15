@@ -5,6 +5,7 @@ import reducer from "../funcs/reducer";
 import gameContext from "../context/gameContext";
 import {getItem,setItem,removeItem} from "../funcs/localStorage";
 import HighScore from "../components/HighScore";
+import startClick from "../funcs/startClick";
 
 export default function Home() {
   const [state, dispatch] = useReducer(reducer, {
@@ -80,6 +81,8 @@ export default function Home() {
         {state.difficulty !== "custom" && (
           <HighScore difficulty={state.difficulty}/>
         )}
+        <input type="checkbox"></input>
+        <label>Start with a clicked space</label>
         <button
           onClick={() => {
             dispatch({ type: "createGame" });
@@ -104,6 +107,10 @@ export default function Home() {
           <button onClick={() => {
             dispatch({ type: "createGame" });
           }}>Reset</button>
+          <button onClick={()=>{
+            let empties = startClick(state.game)
+            console.log(empties)
+          }}>Test</button>
         </main>
       </gameContext.Provider>
     );
